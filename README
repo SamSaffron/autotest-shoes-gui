@@ -1,0 +1,6 @@
+A little GUI for autotest 
+
+1. Install Shoes - make sure shoes is in your path 
+2. Copy the autotest-shoe-gui.rb file somewhere
+3. Require it in your .autotest file. (Eg. require '~/autotest-shoes/autotest-shoes-gui'
+4. Run autotest
