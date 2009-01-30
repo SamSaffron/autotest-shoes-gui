@@ -88,17 +88,16 @@ Shoes.app :height => 450, :width => 500, :resizable => true, :title => "autotest
 
   def update_stats(stack, tests)
     
-    stack.clear
 
     unless tests     
-        stack.append do 
+        stack.clear do 
           tagline strong("Peace on earth\nAll tests passed!"), 
             :stroke => green, :left => 150, :top => 120
         end 
         return
     end
 
-    stack.append do 
+    stack.clear do 
       tests_have = (tests.count==1 ? "test has":"tests have") 
       stack do
         background linen 
@@ -116,12 +115,13 @@ Shoes.app :height => 450, :width => 500, :resizable => true, :title => "autotest
 
         p1 = para 
         p2 = para test.stacktrace
-        p2.hide if tests.count > 10 
+        p2.hide
         p1.text = 
           link( 
             test.test, :click => 
             Proc.new { p2.hidden ? p2.show : p2.hide }
           )
+        p2.show if tests.count < 10 
       end
     end
   end 
@@ -141,7 +141,7 @@ Shoes.app :height => 450, :width => 500, :resizable => true, :title => "autotest
     end
   end
   
-  @bottom_stack = stack :height => 45 do
+  @bottom_stack = stack :height => 45, :attach => Window do
     background "#DDD"
     flow do 
       button "Restart Site", :margin => 10 do 
@@ -152,6 +152,20 @@ Shoes.app :height => 450, :width => 500, :resizable => true, :title => "autotest
       end
     end 
   end
+
+  @height = 0
+  every(1) do
+    unless app.height == @height
+      @top_stack.append do 
+        style(:height => app.height - 45)
+      end 
+      @bottom_stack.append do
+        style(:top => app.height-45)
+      end
+      @height = app.height
+    end
+  end
+
 
 end
 
